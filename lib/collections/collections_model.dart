@@ -9,7 +9,6 @@ class Collection {
   String versionControlInfo;
   Map<String, dynamic> sharedVariables;
   int? customOrder;
-  Auth collectionLevelAuth;
   String? environmentBinding;
   Map<String, dynamic> customFields;
 
@@ -22,7 +21,6 @@ class Collection {
     required this.versionControlInfo,
     required this.sharedVariables,
     this.customOrder,
-    required this.collectionLevelAuth,
     this.environmentBinding,
     required this.customFields,
   });
@@ -49,39 +47,7 @@ class Collection {
         'versionControlInfo': versionControlInfo,
         'sharedVariables': sharedVariables,
         'customOrder': customOrder,
-        'collectionLevelAuth': collectionLevelAuth.toJson(),
         'environmentBinding': environmentBinding,
         'customFields': customFields,
-      };
-}
-
-  String type;
-  String? token;
-  String? username;
-  String? password;
-  String? raw;
-
-  Auth({
-    required this.type,
-    this.token,
-    this.username,
-    this.password,
-    this.raw,
-  });
-
-  factory Auth.fromJson(Map<String, dynamic> json) => Auth(
-        type: json['type'],
-        token: json['token'],
-        username: json['username'],
-        password: json['password'],
-        raw: json['raw'],
-      );
-
-  Map<String, dynamic> toJson() => {
-        'type': type,
-        'token': token,
-        'username': username,
-        'password': password,
-        'raw': raw,
       };
 }
