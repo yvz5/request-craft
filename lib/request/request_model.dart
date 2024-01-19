@@ -1,45 +1,45 @@
+import 'package:request_craft/request/request_settings_model.dart';
+
 enum HttpMethod { get, post, put, delete, patch }
 
 enum AuthType { none, basic, token, oauth }
 
-enum BodyType { json, form_encoded, x_form, multipart_form }
+enum BodyType { json, formEncoded, xForm, multipartForm }
 
-class Request {
+class RequestModel {
   String name;
-  String uuid;
   String description;
-  String
-      settingsUuid; // we need a default settings object that will be used as a fallback
+  // we need a default settings object that will be used as a fallback
+  RequestSettings? settings;
   HttpMethod method;
   String url;
   Map<String, String> headers;
-  BodyType bodyType;
+  BodyType? bodyType;
   dynamic body;
   String tests;
   String preRequestScript;
-  Auth auth;
+  Auth? auth;
 
-  Request({
+  RequestModel({
     required this.name,
-    required this.uuid,
     required this.description,
-    //todo create uuid
-    this.settingsUuid = 'defaultSettings.json.uuidV4',
+    this.settings,
     required this.method,
     required this.url,
     required this.headers,
-    required this.bodyType,
+    this.bodyType,
     this.body,
     required this.tests,
     required this.preRequestScript,
-    required this.auth,
+    this.auth,
   });
 
-  factory Request.fromJson(Map<String, dynamic> json) => Request(
+  factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
         name: json['name'],
-        uuid: json['uuid'],
         description: json['description'],
-        settingsUuid: json['settingsUuid'],
+        settings: json['settings'] == null
+            ? null
+            : RequestSettings.fromJson(json['settings']),
         method: _stringToHttpMethod(json['method']),
         url: json['url'],
         headers: Map<String, String>.from(json['headers']),
@@ -47,27 +47,29 @@ class Request {
         body: json['body'],
         tests: json['tests'],
         preRequestScript: json['preRequestScript'],
-        auth: Auth.fromJson(json['auth']),
+        auth: json['auth'] == null ? null : Auth.fromJson(json['auth']),
       );
 
   Map<String, dynamic> toJson() => {
         'name': name,
-        'uuid': uuid,
         'description': description,
         'method': _httpMethodToString(method),
         'url': url,
         'headers': headers,
-        'bodyType': _bodyTypeToString(bodyType),
+        'bodyType': bodyType == null ? '' : _bodyTypeToString(bodyType!),
         'body': body,
         'tests': tests,
         'preRequestScript': preRequestScript,
-        'auth': auth.toJson(),
+        'auth': auth,
+        'settings': settings,
       };
 
-  static BodyType _stringToBodyType(String str) {
-    return BodyType.values.firstWhere(
-        (element) => element.name.toLowerCase() == str.toLowerCase(),
-        orElse: () => throw ArgumentError('Invalid BodyType string: $str'));
+  static BodyType? _stringToBodyType(String str) {
+    return str == ""
+        ? null
+        : BodyType.values.firstWhere(
+            (element) => element.name.toLowerCase() == str.toLowerCase(),
+            orElse: () => throw ArgumentError('Invalid BodyType string: $str'));
   }
 
   static String _bodyTypeToString(BodyType bodyType) {
