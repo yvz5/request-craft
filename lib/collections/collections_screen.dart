@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:request_craft/collections/collections_model.dart';
+import 'package:request_craft/collections/collections_tree_view.dart';
+import 'package:request_craft/request/request_model.dart';
 
 class CollectionsScreen extends StatefulWidget {
   const CollectionsScreen({super.key});
@@ -32,7 +34,24 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                         collections.add(CollectionModel(
                           name: "New collection",
                           description: "",
-                          requests: [],
+                          requests: [
+                            RequestModel(
+                                name: "get users",
+                                description: '',
+                                method: HttpMethod.get,
+                                url: 'http://coke.de',
+                                headers: {},
+                                tests: '',
+                                preRequestScript: ''),
+                            RequestModel(
+                                name: "post users",
+                                description: '',
+                                method: HttpMethod.post,
+                                url: 'http://coke.de',
+                                headers: {},
+                                tests: '',
+                                preRequestScript: ''),
+                          ],
                           tags: [],
                           versionControlInfo: '',
                           sharedVariables: {},
@@ -50,14 +69,10 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                   child: const Text("Import")),
             ],
           ),
+          const Divider(),
           Expanded(
-            child: ListView.builder(
-              itemCount: collections.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(collections[index].name),
-                );
-              },
+            child: CollectionsTreeView(
+              collections: collections,
             ),
           ),
         ],
