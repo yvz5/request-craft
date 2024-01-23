@@ -27,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
           viewMode: SplitViewMode.Horizontal,
         ),
         controller: SplitViewController(
-            limits: [WeightLimit(min: 0.2), WeightLimit(min: 0.2)],
-            weights: [0.2, null]),
+            limits: [WeightLimit(min: 0.3), WeightLimit(min: 0.2)],
+            weights: [0.3, null]),
         children: const [
           CollectionsScreen(),
           RequestScreen(),
